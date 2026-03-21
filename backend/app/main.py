@@ -9,20 +9,12 @@ import json
 app = FastAPI()
 
 # -------------------------
-# CORS (CORREGIDO PRODUCCIÓN)
+# CORS (CORREGIDO PRODUCCIÓN REAL)
 # -------------------------
-
-origins = [
-    "http://localhost:3000",
-    "http://127.0.0.1:3000",
-    "https://analegis-frontend.vercel.app",
-    "https://*.vercel.app",
-]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
-    allow_origin_regex="https://.*\\.vercel\\.app",
+    allow_origins=["*"],  # 🔥 CLAVE: permite TODO (evita bloqueo CORS)
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
