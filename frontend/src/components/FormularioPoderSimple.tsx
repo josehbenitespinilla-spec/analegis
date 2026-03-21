@@ -84,24 +84,45 @@ export default function FormularioPoderSimple({ cerrar }: any) {
     })
   }
 
+  // 🔥🔥🔥 AQUI ESTA EL ARREGLO REAL 🔥🔥🔥
   const generar = async () => {
+    try {
 
-    const res = await fetch(
-      `${API}/generar/familia/poderes/poder_simple`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(form)
+      const res = await fetch(
+        `${API}/generar/familia/poderes/poder_simple`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(form)
+        }
+      )
+
+      if (!res.ok) {
+        const errorText = await res.text()
+        console.error("ERROR BACKEND:", errorText)
+        alert("Error generando documento")
+        return
       }
-    )
 
-    const blob = await res.blob()
-    const url = window.URL.createObjectURL(blob)
+      const blob = await res.blob()
 
-    const a = document.createElement("a")
-    a.href = url
-    a.download = "poder_simple.docx"
-    a.click()
+      // 🔥 asegurar descarga correcta en navegador
+      const url = window.URL.createObjectURL(blob)
+
+      const a = document.createElement("a")
+      a.href = url
+      a.download = "poder_simple.docx"
+      document.body.appendChild(a)
+      a.click()
+
+      // limpiar
+      a.remove()
+      window.URL.revokeObjectURL(url)
+
+    } catch (err) {
+      console.error("ERROR:", err)
+      alert("Error de conexión con el servidor")
+    }
   }
 
   return (
