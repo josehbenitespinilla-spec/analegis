@@ -4,6 +4,8 @@ import { useEffect, useState } from "react"
 
 export default function FormularioPoderSimple({ cerrar }: any) {
 
+  const API = "https://analegis-backend.onrender.com"
+
   const [departamentos, setDepartamentos] = useState<string[]>([])
 
   const [municipios, setMunicipios] = useState<string[]>([])
@@ -19,7 +21,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
 
     abogado_nombre: "",
     abogado_identificacion: "",
-    abogado_departamento: "", // 🔥 NUEVO
+    abogado_departamento: "",
     abogado_ciudad: "",
     abogado_direccion: "",
     abogado_correo: "",
@@ -29,7 +31,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
     poderdante: {
       nombre: "",
       identificacion: "",
-      departamento: "", // 🔥 NUEVO
+      departamento: "",
       ciudad: "",
       direccion: "",
       correo: "",
@@ -39,7 +41,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
     demandado: {
       nombre: "",
       identificacion: "",
-      departamento: "", // 🔥 NUEVO
+      departamento: "",
       ciudad: "",
       direccion: "",
       correo: "",
@@ -48,19 +50,19 @@ export default function FormularioPoderSimple({ cerrar }: any) {
   })
 
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/departamentos")
+    fetch(`${API}/departamentos`)
       .then(res => res.json())
       .then(setDepartamentos)
   }, [])
 
   const cargarMunicipios = async (dep: string) => {
-    const res = await fetch(`http://127.0.0.1:8000/municipios/${dep}`)
+    const res = await fetch(`${API}/municipios/${dep}`)
     const data = await res.json()
     setMunicipios(data)
   }
 
   const cargarMunicipiosPersona = async (dep: string, tipo: string) => {
-    const res = await fetch(`http://127.0.0.1:8000/municipios/${dep}`)
+    const res = await fetch(`${API}/municipios/${dep}`)
     const data = await res.json()
 
     if (tipo === "poderdante") setMunicipiosPod(data)
@@ -85,7 +87,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
   const generar = async () => {
 
     const res = await fetch(
-      "http://127.0.0.1:8000/generar/familia/poderes/poder_simple",
+      `${API}/generar/familia/poderes/poder_simple`,
       {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -107,7 +109,6 @@ export default function FormularioPoderSimple({ cerrar }: any) {
 
       <h2 className="text-xl font-bold">Poder Simple</h2>
 
-      {/* UBICACIÓN PRINCIPAL */}
       <select onChange={(e)=>cargarMunicipios(e.target.value)} className="border p-2 w-full">
         <option>Departamento</option>
         {departamentos.map((d,i)=><option key={i}>{d}</option>)}
@@ -122,7 +123,6 @@ export default function FormularioPoderSimple({ cerrar }: any) {
       <input name="juzgado" placeholder="Juzgado" onChange={cambiar} className="border p-2 w-full"/>
       <input name="tipo_proceso" placeholder="Tipo proceso" onChange={cambiar} className="border p-2 w-full"/>
 
-      {/* PODERDANTE */}
       <h3 className="font-bold">Poderdante</h3>
 
       <input placeholder="Nombre" onChange={(e)=>cambiarPersona("poderdante","nombre",e.target.value)} className="border p-2 w-full"/>
@@ -130,7 +130,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
 
       <select
         onChange={(e)=>{
-          cambiarPersona("poderdante","departamento",e.target.value) // 🔥 GUARDAR
+          cambiarPersona("poderdante","departamento",e.target.value)
           cargarMunicipiosPersona(e.target.value,"poderdante")
         }}
         className="border p-2 w-full"
@@ -149,7 +149,6 @@ export default function FormularioPoderSimple({ cerrar }: any) {
       <input placeholder="Correo" onChange={(e)=>cambiarPersona("poderdante","correo",e.target.value)} className="border p-2 w-full"/>
       <input placeholder="Celular" onChange={(e)=>cambiarPersona("poderdante","celular",e.target.value)} className="border p-2 w-full"/>
 
-      {/* DEMANDADO */}
       <h3 className="font-bold">Demandado</h3>
 
       <input placeholder="Nombre" onChange={(e)=>cambiarPersona("demandado","nombre",e.target.value)} className="border p-2 w-full"/>
@@ -157,7 +156,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
 
       <select
         onChange={(e)=>{
-          cambiarPersona("demandado","departamento",e.target.value) // 🔥 GUARDAR
+          cambiarPersona("demandado","departamento",e.target.value)
           cargarMunicipiosPersona(e.target.value,"demandado")
         }}
         className="border p-2 w-full"
@@ -176,7 +175,6 @@ export default function FormularioPoderSimple({ cerrar }: any) {
       <input placeholder="Correo" onChange={(e)=>cambiarPersona("demandado","correo",e.target.value)} className="border p-2 w-full"/>
       <input placeholder="Celular" onChange={(e)=>cambiarPersona("demandado","celular",e.target.value)} className="border p-2 w-full"/>
 
-      {/* ABOGADO */}
       <h3 className="font-bold">Abogado</h3>
 
       <input name="abogado_nombre" placeholder="Nombre abogado" onChange={cambiar} className="border p-2 w-full"/>
@@ -184,7 +182,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
 
       <select
         onChange={(e)=>{
-          setForm({...form, abogado_departamento: e.target.value}) // 🔥 GUARDAR
+          setForm({...form, abogado_departamento: e.target.value})
           cargarMunicipiosPersona(e.target.value,"abogado")
         }}
         className="border p-2 w-full"
