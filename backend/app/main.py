@@ -9,20 +9,20 @@ import json
 app = FastAPI()
 
 # -------------------------
-# CORS (CORREGIDO)
+# CORS (CORREGIDO PRODUCCIÓN)
 # -------------------------
 
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
-    "http://localhost:3001",              # ✅ agregado
-    "http://127.0.0.1:3001",              # ✅ agregado
-    "https://analegis-frontend.vercel.app"  # ✅ agregado (CLAVE)
+    "https://analegis-frontend.vercel.app",
+    "https://*.vercel.app",
 ]
 
 app.add_middleware(
     CORSMiddleware,
     allow_origins=origins,
+    allow_origin_regex="https://.*\\.vercel\\.app",
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -135,7 +135,6 @@ async def generar_documento(area: str, categoria: str, documento: str, datos: di
         modulo = importlib.util.module_from_spec(spec)
         spec.loader.exec_module(modulo)
 
-        # 🔥 DEBUG (IMPORTANTE)
         print("DATOS RECIBIDOS:", datos)
 
         doc = modulo.generar(datos)
