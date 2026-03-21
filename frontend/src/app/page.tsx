@@ -14,34 +14,45 @@ export default function Home() {
   const [documentos, setDocumentos] = useState<string[]>([])
   const [ventanas, setVentanas] = useState<any[]>([])
 
-  // 🔥 URL BACKEND (NUEVO)
-  const API = "https://analegis-backend.onrender.com"
+  // 🔥 URL BACKEND (CORREGIDO SIN ROMPER LOCAL)
+  const API =
+    process.env.NEXT_PUBLIC_API_URL ||
+    "http://127.0.0.1:8000"
 
   // 🔥 CARGAR AREAS DINÁMICAS
   useEffect(() => {
     fetch(`${API}/areas`)
       .then(res => res.json())
       .then(setAreas)
+      .catch(err => console.error("Error cargando áreas:", err))
   }, [])
 
   const cargarCategorias = async (area: string) => {
     setAreaActiva(area)
 
-    const res = await fetch(`${API}/categorias/${area}`)
-    const data = await res.json()
+    try {
+      const res = await fetch(`${API}/categorias/${area}`)
+      const data = await res.json()
 
-    setCategorias(data)
-    setDocumentos([])
+      setCategorias(data)
+      setDocumentos([])
+    } catch (err) {
+      console.error("Error cargando categorías:", err)
+    }
   }
 
   const cargarDocumentos = async (categoria: string) => {
-    const res = await fetch(`${API}/documentos/${areaActiva}/${categoria}`)
-    const data = await res.json()
+    try {
+      const res = await fetch(`${API}/documentos/${areaActiva}/${categoria}`)
+      const data = await res.json()
 
-    setDocumentos(data)
+      setDocumentos(data)
+    } catch (err) {
+      console.error("Error cargando documentos:", err)
+    }
   }
 
-  // 🔥 ABRIR VENTANA REAL (AJUSTADO SOLO PARA LOGIN/REGISTRO)
+  // 🔥 ABRIR VENTANA REAL
   const abrirVentana = (tipo: string) => {
 
     contador++
@@ -72,7 +83,7 @@ export default function Home() {
       {/* INTERFAZ PRINCIPAL */}
       <main className="flex flex-col min-h-screen">
 
-        {/* HEADER (AJUSTE SOLO EN BOTONES) */}
+        {/* HEADER */}
         <div className="bg-blue-800 text-white p-10 flex justify-between items-center">
           <div>
             <h1 className="text-4xl font-bold">ANALEGIS</h1>
