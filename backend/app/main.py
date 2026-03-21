@@ -15,11 +15,14 @@ app = FastAPI()
 origins = [
     "http://localhost:3000",
     "http://127.0.0.1:3000",
+    "http://localhost:3001",              # ✅ agregado
+    "http://127.0.0.1:3001",              # ✅ agregado
+    "https://analegis-frontend.vercel.app"  # ✅ agregado (CLAVE)
 ]
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,  # en desarrollo puedes usar ["*"]
+    allow_origins=origins,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
