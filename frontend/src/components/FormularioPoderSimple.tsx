@@ -15,6 +15,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
 
   const [form, setForm] = useState<any>({
     ciudad: "",
+    departamento: "", // 🔥 agregado
     fecha: "",
     juzgado: "",
     tipo_proceso: "",
@@ -58,7 +59,14 @@ export default function FormularioPoderSimple({ cerrar }: any) {
   const cargarMunicipios = async (dep: string) => {
     const res = await fetch(`${API}/municipios/${dep}`)
     const data = await res.json()
+
     setMunicipios(data)
+
+    // 🔥 guardar departamento principal
+    setForm((prev:any)=>({
+      ...prev,
+      departamento: dep
+    }))
   }
 
   const cargarMunicipiosPersona = async (dep: string, tipo: string) => {
@@ -84,7 +92,6 @@ export default function FormularioPoderSimple({ cerrar }: any) {
     })
   }
 
-  // 🔥🔥🔥 AQUI ESTA EL ARREGLO REAL 🔥🔥🔥
   const generar = async () => {
     try {
 
@@ -106,7 +113,7 @@ export default function FormularioPoderSimple({ cerrar }: any) {
 
       const blob = await res.blob()
 
-      // 🔥 asegurar descarga correcta en navegador
+      // 🔥 descarga forzada (más confiable en producción)
       const url = window.URL.createObjectURL(blob)
 
       const a = document.createElement("a")
@@ -115,9 +122,10 @@ export default function FormularioPoderSimple({ cerrar }: any) {
       document.body.appendChild(a)
       a.click()
 
-      // limpiar
-      a.remove()
-      window.URL.revokeObjectURL(url)
+      setTimeout(() => {
+        a.remove()
+        window.URL.revokeObjectURL(url)
+      }, 1000)
 
     } catch (err) {
       console.error("ERROR:", err)
@@ -130,14 +138,15 @@ export default function FormularioPoderSimple({ cerrar }: any) {
 
       <h2 className="text-xl font-bold">Poder Simple</h2>
 
+      {/* 🔥 FIX PRINCIPAL */}
       <select onChange={(e)=>cargarMunicipios(e.target.value)} className="border p-2 w-full">
-        <option>Departamento</option>
-        {departamentos.map((d,i)=><option key={i}>{d}</option>)}
+        <option value="">Departamento</option>
+        {departamentos.map((d,i)=><option key={i} value={d}>{d}</option>)}
       </select>
 
       <select name="ciudad" onChange={cambiar} className="border p-2 w-full">
-        <option>Ciudad</option>
-        {municipios.map((m,i)=><option key={i}>{m}</option>)}
+        <option value="">Ciudad</option>
+        {municipios.map((m,i)=><option key={i} value={m}>{m}</option>)}
       </select>
 
       <input name="fecha" placeholder="Fecha" onChange={cambiar} className="border p-2 w-full"/>
@@ -156,14 +165,14 @@ export default function FormularioPoderSimple({ cerrar }: any) {
         }}
         className="border p-2 w-full"
       >
-        <option>Departamento</option>
-        {departamentos.map((d,i)=><option key={i}>{d}</option>)}
+        <option value="">Departamento</option>
+        {departamentos.map((d,i)=><option key={i} value={d}>{d}</option>)}
       </select>
 
       <select className="border p-2 w-full"
         onChange={(e)=>cambiarPersona("poderdante","ciudad",e.target.value)}>
-        <option>Ciudad</option>
-        {municipiosPod.map((m,i)=><option key={i}>{m}</option>)}
+        <option value="">Ciudad</option>
+        {municipiosPod.map((m,i)=><option key={i} value={m}>{m}</option>)}
       </select>
 
       <input placeholder="Dirección" onChange={(e)=>cambiarPersona("poderdante","direccion",e.target.value)} className="border p-2 w-full"/>
@@ -182,14 +191,14 @@ export default function FormularioPoderSimple({ cerrar }: any) {
         }}
         className="border p-2 w-full"
       >
-        <option>Departamento</option>
-        {departamentos.map((d,i)=><option key={i}>{d}</option>)}
+        <option value="">Departamento</option>
+        {departamentos.map((d,i)=><option key={i} value={d}>{d}</option>)}
       </select>
 
       <select className="border p-2 w-full"
         onChange={(e)=>cambiarPersona("demandado","ciudad",e.target.value)}>
-        <option>Ciudad</option>
-        {municipiosDem.map((m,i)=><option key={i}>{m}</option>)}
+        <option value="">Ciudad</option>
+        {municipiosDem.map((m,i)=><option key={i} value={m}>{m}</option>)}
       </select>
 
       <input placeholder="Dirección" onChange={(e)=>cambiarPersona("demandado","direccion",e.target.value)} className="border p-2 w-full"/>
@@ -208,13 +217,13 @@ export default function FormularioPoderSimple({ cerrar }: any) {
         }}
         className="border p-2 w-full"
       >
-        <option>Departamento</option>
-        {departamentos.map((d,i)=><option key={i}>{d}</option>)}
+        <option value="">Departamento</option>
+        {departamentos.map((d,i)=><option key={i} value={d}>{d}</option>)}
       </select>
 
       <select name="abogado_ciudad" onChange={cambiar} className="border p-2 w-full">
-        <option>Ciudad abogado</option>
-        {municipiosAbo.map((m,i)=><option key={i}>{m}</option>)}
+        <option value="">Ciudad abogado</option>
+        {municipiosAbo.map((m,i)=><option key={i} value={m}>{m}</option>)}
       </select>
 
       <input name="abogado_direccion" placeholder="Dirección abogado" onChange={cambiar} className="border p-2 w-full"/>
