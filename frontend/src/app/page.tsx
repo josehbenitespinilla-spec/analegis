@@ -14,9 +14,12 @@ export default function Home() {
   const [documentos, setDocumentos] = useState<string[]>([])
   const [ventanas, setVentanas] = useState<any[]>([])
 
+  // 🔥 URL BACKEND (NUEVO)
+  const API = "https://analegis-backend.onrender.com"
+
   // 🔥 CARGAR AREAS DINÁMICAS
   useEffect(() => {
-    fetch("http://127.0.0.1:8000/areas")
+    fetch(`${API}/areas`)
       .then(res => res.json())
       .then(setAreas)
   }, [])
@@ -24,7 +27,7 @@ export default function Home() {
   const cargarCategorias = async (area: string) => {
     setAreaActiva(area)
 
-    const res = await fetch(`http://127.0.0.1:8000/categorias/${area}`)
+    const res = await fetch(`${API}/categorias/${area}`)
     const data = await res.json()
 
     setCategorias(data)
@@ -32,7 +35,7 @@ export default function Home() {
   }
 
   const cargarDocumentos = async (categoria: string) => {
-    const res = await fetch(`http://127.0.0.1:8000/documentos/${areaActiva}/${categoria}`)
+    const res = await fetch(`${API}/documentos/${areaActiva}/${categoria}`)
     const data = await res.json()
 
     setDocumentos(data)
