@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import FormularioPoderSimple from "./FormularioPoderSimple"
+import FormularioPoderPersonaNatural from "./FormularioPoderPersonaNatural" // 🔥 NUEVO
 
 export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
@@ -75,6 +76,7 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
           // 🔥 TITULO DINÁMICO
           let titulo = "VENTANA"
           if (v.tipo === "poder_simple") titulo = "PODER SIMPLE"
+          if (v.tipo === "poder_persona_natural") titulo = "PODER PERSONA NATURAL" // 🔥 NUEVO
           if (v.tipo === "login") titulo = "INICIAR SESIÓN"
           if (v.tipo === "registro") titulo = "CREAR CUENTA"
 
@@ -134,12 +136,17 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
               {/* CONTENIDO DINÁMICO */}
               <div className="flex-1 overflow-y-auto p-4">
 
-                {/* PODER */}
+                {/* PODER SIMPLE */}
                 {v.tipo === "poder_simple" && (
                   <FormularioPoderSimple cerrar={() => cerrarVentana(v.id)} />
                 )}
 
-                {/* LOGIN (placeholder limpio) */}
+                {/* 🔥 NUEVO FORMULARIO */}
+                {v.tipo === "poder_persona_natural" && (
+                  <FormularioPoderPersonaNatural cerrar={() => cerrarVentana(v.id)} />
+                )}
+
+                {/* LOGIN */}
                 {v.tipo === "login" && (
                   <div className="flex flex-col gap-3 max-w-md">
                     <input placeholder="Correo" className="border p-2" />
@@ -150,7 +157,7 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
                   </div>
                 )}
 
-                {/* REGISTRO (placeholder limpio) */}
+                {/* REGISTRO */}
                 {v.tipo === "registro" && (
                   <div className="flex flex-col gap-3 max-w-md">
                     <input placeholder="Nombre" className="border p-2" />
@@ -181,6 +188,7 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
           let titulo = "VENTANA"
           if (v.tipo === "poder_simple") titulo = "PODER"
+          if (v.tipo === "poder_persona_natural") titulo = "PODER PN" // 🔥 NUEVO
           if (v.tipo === "login") titulo = "LOGIN"
           if (v.tipo === "registro") titulo = "REGISTRO"
 
