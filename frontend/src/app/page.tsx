@@ -14,18 +14,20 @@ export default function Home() {
   const [documentos, setDocumentos] = useState<string[]>([])
   const [ventanas, setVentanas] = useState<any[]>([])
 
-  // 🔥 URL BACKEND (CORREGIDO SIN ROMPER LOCAL)
-  const API =
-    process.env.NEXT_PUBLIC_API_URL ||
-    "http://127.0.0.1:8000"
+  // 🔥 API SOLO DESDE ENV (SIN LOCALHOST EN PRODUCCIÓN)
+  const API = process.env.NEXT_PUBLIC_API_URL as string
 
-  // 🔥 CARGAR AREAS DINÁMICAS
   useEffect(() => {
+    if (!API) {
+      console.error("❌ ERROR: NEXT_PUBLIC_API_URL no está definida")
+      return
+    }
+
     fetch(`${API}/areas`)
       .then(res => res.json())
       .then(setAreas)
       .catch(err => console.error("Error cargando áreas:", err))
-  }, [])
+  }, [API])
 
   const cargarCategorias = async (area: string) => {
     setAreaActiva(area)
@@ -52,9 +54,7 @@ export default function Home() {
     }
   }
 
-  // 🔥 ABRIR VENTANA REAL
   const abrirVentana = (tipo: string) => {
-
     contador++
 
     const nueva = {
@@ -70,9 +70,7 @@ export default function Home() {
   }
 
   return (
-
     <>
-      {/* 🔥 CAPA GLOBAL DE VENTANAS */}
       <div className="fixed inset-0 z-[9999] pointer-events-none">
         <GestorVentanas
           ventanas={ventanas}
@@ -80,10 +78,8 @@ export default function Home() {
         />
       </div>
 
-      {/* INTERFAZ PRINCIPAL */}
       <main className="flex flex-col min-h-screen">
 
-        {/* HEADER */}
         <div className="bg-blue-800 text-white p-10 flex justify-between items-center">
           <div>
             <h1 className="text-4xl font-bold">ANALEGIS</h1>
@@ -106,9 +102,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* 🔥 AREAS DINÁMICAS */}
         <div className="bg-gray-200 p-4 flex justify-center gap-4 border-b">
-
           {areas.map((area, i) => (
             <button
               key={i}
@@ -118,10 +112,8 @@ export default function Home() {
               {area}
             </button>
           ))}
-
         </div>
 
-        {/* CONTENIDO */}
         <div className="flex-1 flex flex-col items-center justify-center gap-6">
 
           {categorias.length === 0 && (
@@ -165,7 +157,6 @@ export default function Home() {
 
         </div>
 
-        {/* FOOTER */}
         <div className="bg-gray-900 text-white text-center p-6">
           <p className="text-lg">ANALEGIS - Plataforma Legaltech</p>
           <p className="text-gray-400 text-sm">
