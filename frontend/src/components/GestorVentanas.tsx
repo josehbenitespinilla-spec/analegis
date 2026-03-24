@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 import FormularioPoderSimple from "./FormularioPoderSimple"
-import FormularioPoderPersonaNatural from "./FormularioPoderPersonaNatural" // 🔥 NUEVO
+import FormularioPoderPersonaNatural from "./formularios/poderes_base/FormularioPoderPersonaNatural"
 
 export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
@@ -54,7 +54,6 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
   return createPortal(
 
     <>
-      {/* 🪟 ESCRITORIO */}
       <div
         onMouseMove={mover}
         onMouseUp={soltar}
@@ -73,10 +72,9 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
             y: 60
           }
 
-          // 🔥 TITULO DINÁMICO
           let titulo = "VENTANA"
           if (v.tipo === "poder_simple") titulo = "PODER SIMPLE"
-          if (v.tipo === "poder_persona_natural") titulo = "PODER PERSONA NATURAL" // 🔥 NUEVO
+          if (v.tipo === "poder_persona_natural") titulo = "PODER PERSONA NATURAL"
           if (v.tipo === "login") titulo = "INICIAR SESIÓN"
           if (v.tipo === "registro") titulo = "CREAR CUENTA"
 
@@ -95,7 +93,6 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
               }}
             >
 
-              {/* HEADER */}
               <div
                 onMouseDown={(e) => iniciarDrag(e, v.id)}
                 className="flex justify-between items-center bg-gray-200 px-4 py-2 cursor-move border-b"
@@ -104,25 +101,21 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
                 <div className="flex gap-2">
 
-                  <button
-                    onClick={() =>
-                      setMinimizadas((prev: any) => ({
-                        ...prev,
-                        [v.id]: true
-                      }))
-                    }
-                  >
+                  <button onClick={() =>
+                    setMinimizadas((prev: any) => ({
+                      ...prev,
+                      [v.id]: true
+                    }))
+                  }>
                     _
                   </button>
 
-                  <button
-                    onClick={() =>
-                      setMaximizadas((prev: any) => ({
-                        ...prev,
-                        [v.id]: !prev[v.id]
-                      }))
-                    }
-                  >
+                  <button onClick={() =>
+                    setMaximizadas((prev: any) => ({
+                      ...prev,
+                      [v.id]: !prev[v.id]
+                    }))
+                  }>
                     {maximizada ? "🗗" : "🗖"}
                   </button>
 
@@ -133,20 +126,16 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
                 </div>
               </div>
 
-              {/* CONTENIDO DINÁMICO */}
               <div className="flex-1 overflow-y-auto p-4">
 
-                {/* PODER SIMPLE */}
                 {v.tipo === "poder_simple" && (
                   <FormularioPoderSimple cerrar={() => cerrarVentana(v.id)} />
                 )}
 
-                {/* 🔥 NUEVO FORMULARIO */}
                 {v.tipo === "poder_persona_natural" && (
                   <FormularioPoderPersonaNatural cerrar={() => cerrarVentana(v.id)} />
                 )}
 
-                {/* LOGIN */}
                 {v.tipo === "login" && (
                   <div className="flex flex-col gap-3 max-w-md">
                     <input placeholder="Correo" className="border p-2" />
@@ -157,7 +146,6 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
                   </div>
                 )}
 
-                {/* REGISTRO */}
                 {v.tipo === "registro" && (
                   <div className="flex flex-col gap-3 max-w-md">
                     <input placeholder="Nombre" className="border p-2" />
@@ -177,7 +165,6 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
       </div>
 
-      {/* 🔥 BARRA */}
       <div className="fixed bottom-0 left-0 w-full h-12 bg-gray-900 flex items-center px-3 gap-2 z-[99999]">
 
         <div className="text-white font-bold mr-4">
@@ -188,7 +175,7 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
           let titulo = "VENTANA"
           if (v.tipo === "poder_simple") titulo = "PODER"
-          if (v.tipo === "poder_persona_natural") titulo = "PODER PN" // 🔥 NUEVO
+          if (v.tipo === "poder_persona_natural") titulo = "PODER PN"
           if (v.tipo === "login") titulo = "LOGIN"
           if (v.tipo === "registro") titulo = "REGISTRO"
 
