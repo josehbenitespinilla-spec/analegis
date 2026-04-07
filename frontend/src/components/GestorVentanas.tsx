@@ -2,8 +2,11 @@
 
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
+
+// 🔥 IMPORTS LIMPIOS Y AL MISMO NIVEL
 import FormularioPoderSimple from "./FormularioPoderSimple"
-import FormularioPoderPersonaNatural from "./formularios/poderes_base/FormularioPoderPersonaNatural"
+import FormularioPoderPersonaNatural from "./FormularioPoderPersonaNatural"
+import FormularioPoderBaseSimple from "./FormularioPoderBaseSimple"
 
 export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
@@ -72,9 +75,11 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
             y: 60
           }
 
+          // 🔥 TÍTULOS CENTRALIZADOS
           let titulo = "VENTANA"
           if (v.tipo === "poder_simple") titulo = "PODER SIMPLE"
           if (v.tipo === "poder_persona_natural") titulo = "PODER PERSONA NATURAL"
+          if (v.tipo === "poder_base_simple") titulo = "PODER BASE SIMPLE"
           if (v.tipo === "login") titulo = "INICIAR SESIÓN"
           if (v.tipo === "registro") titulo = "CREAR CUENTA"
 
@@ -136,6 +141,10 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
                   <FormularioPoderPersonaNatural cerrar={() => cerrarVentana(v.id)} />
                 )}
 
+                {v.tipo === "poder_base_simple" && (
+                  <FormularioPoderBaseSimple cerrar={() => cerrarVentana(v.id)} />
+                )}
+
                 {v.tipo === "login" && (
                   <div className="flex flex-col gap-3 max-w-md">
                     <input placeholder="Correo" className="border p-2" />
@@ -176,6 +185,7 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
           let titulo = "VENTANA"
           if (v.tipo === "poder_simple") titulo = "PODER"
           if (v.tipo === "poder_persona_natural") titulo = "PODER PN"
+          if (v.tipo === "poder_base_simple") titulo = "PODER BASE"
           if (v.tipo === "login") titulo = "LOGIN"
           if (v.tipo === "registro") titulo = "REGISTRO"
 
