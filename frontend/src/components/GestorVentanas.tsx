@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react"
 import { createPortal } from "react-dom"
 
-// 🔥 IMPORTS LIMPIOS Y AL MISMO NIVEL
 import FormularioPoderSimple from "./FormularioPoderSimple"
 import FormularioPoderPersonaNatural from "./FormularioPoderPersonaNatural"
 import FormularioPoderBaseSimple from "./FormularioPoderBaseSimple"
@@ -65,6 +64,8 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
         {ventanas.map((v: any, index: number) => {
 
+          const tipo = v.tipo?.trim().toLowerCase() // 🔥 FIX CLAVE
+
           const minimizada = minimizadas[v.id] === true
           const maximizada = maximizadas[v.id] === true
 
@@ -75,13 +76,12 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
             y: 60
           }
 
-          // 🔥 TÍTULOS CENTRALIZADOS
           let titulo = "VENTANA"
-          if (v.tipo === "poder_simple") titulo = "PODER SIMPLE"
-          if (v.tipo === "poder_persona_natural") titulo = "PODER PERSONA NATURAL"
-          if (v.tipo === "poder_base_simple") titulo = "PODER BASE SIMPLE"
-          if (v.tipo === "login") titulo = "INICIAR SESIÓN"
-          if (v.tipo === "registro") titulo = "CREAR CUENTA"
+          if (tipo === "poder_simple") titulo = "PODER SIMPLE"
+          if (tipo === "poder_persona_natural") titulo = "PODER PERSONA NATURAL"
+          if (tipo === "poder_base_simple") titulo = "PODER BASE SIMPLE"
+          if (tipo === "login") titulo = "INICIAR SESIÓN"
+          if (tipo === "registro") titulo = "CREAR CUENTA"
 
           return (
             <div
@@ -133,19 +133,19 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
               <div className="flex-1 overflow-y-auto p-4">
 
-                {v.tipo === "poder_simple" && (
+                {tipo === "poder_simple" && (
                   <FormularioPoderSimple cerrar={() => cerrarVentana(v.id)} />
                 )}
 
-                {v.tipo === "poder_persona_natural" && (
+                {tipo === "poder_persona_natural" && (
                   <FormularioPoderPersonaNatural cerrar={() => cerrarVentana(v.id)} />
                 )}
 
-                {v.tipo === "poder_base_simple" && (
+                {tipo === "poder_base_simple" && (
                   <FormularioPoderBaseSimple cerrar={() => cerrarVentana(v.id)} />
                 )}
 
-                {v.tipo === "login" && (
+                {tipo === "login" && (
                   <div className="flex flex-col gap-3 max-w-md">
                     <input placeholder="Correo" className="border p-2" />
                     <input placeholder="Contraseña" type="password" className="border p-2" />
@@ -155,7 +155,7 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
                   </div>
                 )}
 
-                {v.tipo === "registro" && (
+                {tipo === "registro" && (
                   <div className="flex flex-col gap-3 max-w-md">
                     <input placeholder="Nombre" className="border p-2" />
                     <input placeholder="Correo" className="border p-2" />
@@ -182,12 +182,14 @@ export default function GestorVentanas({ ventanas, cerrarVentana }: any) {
 
         {ventanas.map((v: any) => {
 
+          const tipo = v.tipo?.trim().toLowerCase() // 🔥 FIX TAMBIÉN AQUÍ
+
           let titulo = "VENTANA"
-          if (v.tipo === "poder_simple") titulo = "PODER"
-          if (v.tipo === "poder_persona_natural") titulo = "PODER PN"
-          if (v.tipo === "poder_base_simple") titulo = "PODER BASE"
-          if (v.tipo === "login") titulo = "LOGIN"
-          if (v.tipo === "registro") titulo = "REGISTRO"
+          if (tipo === "poder_simple") titulo = "PODER"
+          if (tipo === "poder_persona_natural") titulo = "PODER PN"
+          if (tipo === "poder_base_simple") titulo = "PODER BASE"
+          if (tipo === "login") titulo = "LOGIN"
+          if (tipo === "registro") titulo = "REGISTRO"
 
           return (
             <button
