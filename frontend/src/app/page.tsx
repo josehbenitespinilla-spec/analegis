@@ -14,7 +14,6 @@ export default function Home() {
   const [documentos, setDocumentos] = useState<string[]>([])
   const [ventanas, setVentanas] = useState<any[]>([])
 
-  // 🔥 API SOLO DESDE ENV (SIN LOCALHOST EN PRODUCCIÓN)
   const API = process.env.NEXT_PUBLIC_API_URL as string
 
   useEffect(() => {
@@ -54,12 +53,13 @@ export default function Home() {
     }
   }
 
+  // 🔥 FIX CLAVE AQUÍ
   const abrirVentana = (tipo: string) => {
     contador++
 
     const nueva = {
       id: contador,
-      tipo
+      tipo: tipo.trim().toLowerCase() // ✅ NORMALIZA EL STRING
     }
 
     setVentanas(prev => [...prev, nueva])
